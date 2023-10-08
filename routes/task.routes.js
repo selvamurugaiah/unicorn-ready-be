@@ -39,6 +39,27 @@ router.get("/done", async (req, res) => {
   }
 });
 
+
+
+
+
+router.get("/:title", async (req, res) => {
+  const { title } = req.params;
+
+  try {
+  
+    const tasks = await Tasks.find({ title: title });
+
+    if (tasks.length === 0) {
+      return res.status(404).send({ message: "No tasks found with the given title." });
+    }
+
+    return res.status(200).send(tasks);
+  } catch (error) {
+    return res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -49,6 +70,9 @@ router.get("/:id", async (req, res) => {
     return res.status(500).send({ message: "From ID Internal Server Error" });
   }
 });
+
+
+
 
 
 router.post("/", authorizeUser, addNewTask);
